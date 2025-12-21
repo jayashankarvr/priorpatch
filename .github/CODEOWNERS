@@ -1,0 +1,26 @@
+# CODEOWNERS file
+
+## These owners will be requested for review when someone opens a pull request
+
+## Default owners for everything
+
+* @jayashankarvr
+
+## Core functionality
+
+/priorpatch/core.py @jayashankarvr
+/priorpatch/cli.py @jayashankarvr
+
+## Detectors - anyone can contribute, but owner reviews
+
+/priorpatch/detectors/ @jayashankarvr
+
+## CI/CD and infrastructure
+
+/.github/ @jayashankarvr
+/pyproject.toml @jayashankarvr
+
+## Documentation
+
+/docs/ @jayashankarvr
+/README.md @jayashankarvr

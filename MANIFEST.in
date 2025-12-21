@@ -1,0 +1,31 @@
+# Include documentation
+include README.md
+include LICENSE
+include CHANGELOG.md
+include CODE_OF_CONDUCT.md
+include CONTRIBUTING.md
+include SECURITY.md
+
+# Include requirements
+include requirements.txt
+include requirements-dev.txt
+
+# Include configuration
+recursive-include config *.json
+
+# Include tests
+recursive-include tests *.py *.png
+
+# Include examples
+recursive-include examples *.py *.png *.md
+
+# Include documentation
+recursive-include docs *.md
+
+# Include type information
+include priorpatch/py.typed
+
+# Include package data
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude .DS_Store
