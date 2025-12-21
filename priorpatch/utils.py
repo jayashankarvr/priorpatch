@@ -6,7 +6,12 @@ import os
 import logging
 import numpy as np
 from PIL import Image
+
+# Use non-interactive backend (fixes Windows CI without display)
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
