@@ -129,8 +129,6 @@ def _worker_score_patch(img_patch: np.ndarray) -> Tuple[float, List[float], List
     Uses detector instances created by _init_worker (once per process)
     instead of creating new ones for each patch.
     """
-    global _worker_detectors, _worker_detector_names, _worker_weights
-
     vals = []
     failures = []
     for i, d in enumerate(_worker_detectors):
