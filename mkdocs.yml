@@ -1,0 +1,34 @@
+site_name: PriorPatch
+site_url: https://github.com/jayashankarvr/priorpatch
+repo_url: https://github.com/jayashankarvr/priorpatch
+repo_name: jayashankarvr/priorpatch
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: indigo
+  features:
+    - content.code.copy
+    - content.code.annotate
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Usage: usage.md
+  - Detectors: detectors.md
+  - Architecture: architecture.md
+  - API: api.md
+  - Logging: logging.md
+  - Limitations: limitations.md

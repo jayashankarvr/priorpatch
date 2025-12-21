@@ -1,0 +1,41 @@
+{
+  "_comment": "PriorPatch Detector Configuration",
+  "_note": "Weights are initial estimates based on research literature, not empirically tuned on benchmarks. Higher weights = more influential in final score. To tune for your use case, benchmark on labeled datasets and adjust weights accordingly.",
+  "version": "2.1",
+  "enabled_detectors": [
+    "color_stats",
+    "neighbor_consistency",
+    "fft_dct",
+    "residual_energy",
+    "dct_cooccurrence",
+    "jpeg_ghost",
+    "gan_fingerprint",
+    "noise_consistency",
+    "benford_law",
+    "cfa_artifact",
+    "lbp_texture",
+    "chromatic_aberration",
+    "prnu_wavelet",
+    "ela",
+    "lighting_consistency",
+    "copy_move"
+  ],
+  "detector_weights": {
+    "color_stats": 1.0,
+    "neighbor_consistency": 1.0,
+    "fft_dct": 1.0,
+    "residual_energy": 1.0,
+    "dct_cooccurrence": 1.0,
+    "jpeg_ghost": 1.2,
+    "gan_fingerprint": 1.5,
+    "noise_consistency": 1.3,
+    "benford_law": 1.8,
+    "cfa_artifact": 2.0,
+    "lbp_texture": 1.5,
+    "chromatic_aberration": 1.3,
+    "prnu_wavelet": 1.5,
+    "ela": 1.8,
+    "lighting_consistency": 1.2,
+    "copy_move": 1.5
+  }
+}
