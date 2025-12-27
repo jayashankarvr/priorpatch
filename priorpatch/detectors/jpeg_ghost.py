@@ -34,6 +34,10 @@ class JPEGGhostDetector(DetectorInterface):
         """
         self.quality_levels = quality_levels or list(range(50, 96, 5))
 
+    def get_config(self) -> dict:
+        """Serialize for multiprocessing."""
+        return {'quality_levels': self.quality_levels}
+
     def score(self, patch: np.ndarray) -> float:
         """
         Score based on JPEG ghost analysis.

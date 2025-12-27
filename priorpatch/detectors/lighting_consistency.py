@@ -250,14 +250,17 @@ class LightingConsistencyDetector(DetectorInterface):
     name = 'lighting_consistency'
 
     def __init__(self, grid_size: int = 4, use_shadows: bool = True):
-        """Initialize detector.
-
+        """
         Args:
             grid_size: Number of regions per dimension for analysis
             use_shadows: Whether to also analyze shadow consistency
         """
         self.grid_size = grid_size
         self.use_shadows = use_shadows
+
+    def get_config(self) -> dict:
+        """Serialize for multiprocessing."""
+        return {'grid_size': self.grid_size, 'use_shadows': self.use_shadows}
 
     def score(self, patch: np.ndarray) -> float:
         """Score patch based on lighting consistency.

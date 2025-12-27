@@ -1,7 +1,7 @@
 """
 Proper PRNU (Photo Response Non-Uniformity) detector using wavelet denoising.
 
-PRNU is a sensor fingerprint caused by manufacturing imperfections.
+Sensor fingerprint from manufacturing variations.
 Every camera sensor has a unique noise pattern that appears in all images.
 
 AI-generated images don't come from real sensors, so they lack proper
@@ -267,12 +267,15 @@ class PRNUWaveletDetector(DetectorInterface):
     name = 'prnu_wavelet'
 
     def __init__(self, wavelet_levels: int = 3):
-        """Initialize detector.
-
+        """
         Args:
             wavelet_levels: Number of wavelet decomposition levels
         """
         self.wavelet_levels = wavelet_levels
+
+    def get_config(self) -> dict:
+        """Serialize for multiprocessing."""
+        return {'wavelet_levels': self.wavelet_levels}
 
     def score(self, patch: np.ndarray) -> float:
         """Score patch based on PRNU analysis.

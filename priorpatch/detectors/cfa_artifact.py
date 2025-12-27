@@ -175,23 +175,26 @@ class CFAArtifactDetector(DetectorInterface):
 
     This exploits a fundamental physical difference between cameras and AI.
 
-    IMPORTANT: Score interpretation for this detector:
-    - Score = 0.0 (LOW): CFA artifacts present → REAL camera image
-    - Score = 1.0 (HIGH): CFA artifacts absent → SUSPICIOUS (likely AI-generated)
+    Score interpretation for this detector:
+    - Score = 0.0: CFA artifacts present (real camera image)
+    - Score = 1.0: CFA artifacts absent (likely AI-generated)
 
-    This is opposite from what you might expect, but makes sense: we're
-    detecting the ABSENCE of camera artifacts, not their presence.
+    Note: This is opposite from what you might expect - we're detecting the
+    absence of camera artifacts, not their presence.
     """
 
     name = 'cfa_artifact'
 
     def __init__(self, check_all_channels: bool = True):
-        """Initialize detector.
-
+        """
         Args:
             check_all_channels: If True, analyze R, G, B separately
         """
         self.check_all_channels = check_all_channels
+
+    def get_config(self) -> dict:
+        """Serialize for multiprocessing."""
+        return {'check_all_channels': self.check_all_channels}
 
     def score(self, patch: np.ndarray) -> float:
         """Score patch based on CFA artifact presence.

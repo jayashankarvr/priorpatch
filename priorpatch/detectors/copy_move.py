@@ -73,20 +73,10 @@ def find_similar_blocks(
     chunk_size: int = 500,
     max_matches: int = 1000
 ) -> List[Tuple[Tuple[int, int], Tuple[int, int], float]]:
-    """Find pairs of similar blocks that are spatially separated.
+    """Find similar blocks that are spatially separated.
 
-    Uses chunked computation to avoid O(N²) memory usage.
-
-    Args:
-        features: Feature matrix (N x D)
-        positions: List of block positions
-        similarity_threshold: Cosine similarity threshold
-        min_distance: Minimum spatial distance between matches
-        chunk_size: Process this many blocks at a time (memory control)
-        max_matches: Stop after finding this many matches (early exit)
-
-    Returns:
-        List of ((pos1), (pos2), similarity) tuples
+    Uses chunked computation for memory efficiency.
+    Returns list of ((pos1), (pos2), similarity) tuples.
     """
     n_blocks = len(features)
 
@@ -294,8 +284,7 @@ class CopyMoveDetector(DetectorInterface):
         similarity_threshold: float = 0.92,
         min_cluster_size: int = 4
     ):
-        """Initialize detector.
-
+        """
         Args:
             block_size: Size of blocks for matching
             stride: Step between blocks
@@ -306,6 +295,15 @@ class CopyMoveDetector(DetectorInterface):
         self.stride = stride
         self.similarity_threshold = similarity_threshold
         self.min_cluster_size = min_cluster_size
+
+    def get_config(self) -> dict:
+        """Serialize for multiprocessing."""
+        return {
+            'block_size': self.block_size,
+            'stride': self.stride,
+            'similarity_threshold': self.similarity_threshold,
+            'min_cluster_size': self.min_cluster_size
+        }
 
     def score(self, patch: np.ndarray) -> float:
         """Score patch for copy-move forgery.

@@ -1,15 +1,10 @@
 """
-Noise Consistency detector - checks for unnatural noise patterns.
+Noise consistency detector - finds regions with unnatural noise patterns.
 
-Real camera images have consistent sensor noise across the entire image.
-AI-generated images often have:
-- Regions that are too smooth (no noise)
-- Inconsistent noise levels in different areas
-- Wrong noise distribution (not Gaussian/Poisson)
+Real cameras have consistent sensor noise. AI-generated images often have
+too-smooth regions or inconsistent noise levels.
 
-This detector measures noise consistency and flags suspicious patterns.
-
-Supports GPU acceleration via CuPy when available.
+GPU-accelerated via CuPy when available.
 """
 
 import logging

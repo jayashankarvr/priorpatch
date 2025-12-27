@@ -2,10 +2,12 @@
 Main ensemble class - runs detectors on patches and combines scores.
 """
 
+import difflib
 import json
 import logging
 import os
 import sys
+import time
 import numpy as np
 from pathlib import Path
 from typing import List, Tuple, Dict, Optional, Union
@@ -15,7 +17,7 @@ from priorpatch.detectors.base import DetectorInterface
 
 logger = logging.getLogger(__name__)
 
-# Try to import tqdm for progress bars (optional)
+# Optional progress bars
 try:
     from tqdm import tqdm
     HAS_TQDM = True
@@ -38,29 +40,15 @@ except ImportError:
 MIN_PATCH_SIZE = 8
 MAX_PATCH_SIZE = 1024
 MIN_STRIDE = 1
-NORMALIZATION_EPSILON = 1e-8  # Use smaller epsilon for float32 precision
+NORMALIZATION_EPSILON = 1e-6  # Appropriate for float32 precision
 MIN_PATCHES_FOR_MULTIPROCESSING = 10
-MAX_DETECTOR_FAILURE_RATE = 0.5
+MAX_DETECTOR_FAILURE_RATE = 0.2  # ERROR if >20% of patches fail
+DETECTOR_TIMEOUT_SECONDS = 10.0  # Log warning if detector exceeds this
 SUPPORTED_CONFIG_VERSIONS = {'2.0', '2.1'}  # Supported config file versions
 
 
 def _find_config_file(config_path: str = 'config/detectors.json') -> str:
-    """
-    Find config file, checking multiple locations in this order:
-    1. Absolute path (if provided)
-    2. Relative to current working directory
-    3. Relative to package installation directory
-    4. Inside installed package data
-
-    Args:
-        config_path: Path to config file (can be absolute or relative)
-
-    Returns:
-        Absolute path to config file
-
-    Raises:
-        FileNotFoundError: If config file cannot be found
-    """
+    """Find config file in standard locations."""
     # If absolute path provided, use it directly
     if os.path.isabs(config_path):
         if os.path.exists(config_path):
@@ -105,45 +93,49 @@ def _find_config_file(config_path: str = 'config/detectors.json') -> str:
     )
 
 
-# Global variable for worker process (set by initializer)
-_worker_detectors = None
-_worker_detector_names = None
-_worker_weights = None
+# Worker process state - avoids global variable race conditions
+class _WorkerState:
+    """Per-process detector storage."""
+    detectors = None
+    detector_names = None
+    weights = None
 
 
-def _init_worker(detector_classes: List, detector_names: List[str], weights: Dict[str, float]):
-    """Initialize worker process with detector instances.
-
-    This is called once per worker process to avoid re-creating detectors
-    for every patch (major performance improvement).
-    """
-    global _worker_detectors, _worker_detector_names, _worker_weights
-    _worker_detectors = [cls() for cls in detector_classes]
-    _worker_detector_names = detector_names
-    _worker_weights = weights
+def _init_worker(detector_configs: List[tuple], detector_names: List[str], weights: Dict[str, float]):
+    """Initialize worker process with detector instances."""
+    _WorkerState.detectors = []
+    for detector_class, config in detector_configs:
+        _WorkerState.detectors.append(detector_class.from_config(config))
+    _WorkerState.detector_names = detector_names
+    _WorkerState.weights = weights
 
 
 def _worker_score_patch(img_patch: np.ndarray) -> Tuple[float, List[float], List[Tuple[str, str]]]:
-    """Multiprocessing worker. Has to be module-level to be picklable.
-
-    Uses detector instances created by _init_worker (once per process)
-    instead of creating new ones for each patch.
-    """
+    """Multiprocessing worker. Must be module-level for pickling."""
     vals = []
     failures = []
-    for i, d in enumerate(_worker_detectors):
+    for i, d in enumerate(_WorkerState.detectors):
+        detector_name = _WorkerState.detector_names[i]
         try:
+            start_time = time.time()
             score = float(d.score(img_patch))
+            elapsed = time.time() - start_time
+
+            if elapsed > DETECTOR_TIMEOUT_SECONDS:
+                logger.warning(
+                    f"Detector '{detector_name}' took {elapsed:.2f}s (timeout: {DETECTOR_TIMEOUT_SECONDS}s)"
+                )
+
             vals.append(score)
         except Exception as e:
             vals.append(0.0)
-            failures.append((_worker_detector_names[i], str(e)))
+            failures.append((detector_name, str(e)))
 
     if not vals:
         return 0.0, [], failures
 
     arr = np.array(vals, dtype=np.float32)
-    weight_arr = np.array([_worker_weights.get(name, 1.0) for name in _worker_detector_names], dtype=np.float32)
+    weight_arr = np.array([_WorkerState.weights.get(name, 1.0) for name in _WorkerState.detector_names], dtype=np.float32)
 
     # Use weighted average directly - NO per-patch normalization
     # Normalization happens later at the heatmap level for visualization
@@ -183,20 +175,9 @@ class Ensemble:
     
     @classmethod
     def from_config(cls, path: str = None) -> 'Ensemble':
-        """Load ensemble from JSON config.
+        """Load ensemble from JSON config. Searches multiple locations if path is relative.
 
-        Args:
-            path: Path to config file (can be absolute or relative).
-                  Will search multiple locations if relative.
-                  If None, uses PRIORPATCH_CONFIG_PATH env var or default.
-
-        Returns:
-            Ensemble instance with detectors loaded from config
-
-        Raises:
-            FileNotFoundError: If config file cannot be found
-            json.JSONDecodeError: If config file is not valid JSON
-            ValueError: If config specifies unknown detectors or invalid weights
+        Uses PRIORPATCH_CONFIG_PATH env var or default if path is None.
         """
         # Check environment variable for config path
         if path is None:
@@ -217,9 +198,10 @@ class Ensemble:
         # Validate config version if present
         config_version = cfg.get('version')
         if config_version and config_version not in SUPPORTED_CONFIG_VERSIONS:
-            logger.warning(
-                f"Config version '{config_version}' may not be fully compatible. "
-                f"Supported versions: {SUPPORTED_CONFIG_VERSIONS}"
+            raise ValueError(
+                f"Unsupported config version '{config_version}'. "
+                f"Supported versions: {SUPPORTED_CONFIG_VERSIONS}. "
+                f"Please update your config file or use a compatible version."
             )
 
         enabled = cfg.get('enabled_detectors', [])
@@ -261,7 +243,16 @@ class Ensemble:
             clsobj = DETECTOR_REGISTRY.get(name)
             if clsobj is None:
                 available = list(DETECTOR_REGISTRY.keys())
-                raise ValueError(f"Detector '{name}' not found. Available: {available}")
+                # Suggest similar names
+                suggestions = difflib.get_close_matches(name, available, n=3, cutoff=0.6)
+                error_msg = f"Detector '{name}' not found."
+                if suggestions:
+                    error_msg += f"\n\nDid you mean one of these?\n"
+                    error_msg += "\n".join(f"  - {s}" for s in suggestions)
+                else:
+                    error_msg += f"\n\nAvailable detectors:\n"
+                    error_msg += "\n".join(f"  - {d}" for d in sorted(available))
+                raise ValueError(error_msg)
             dets.append(clsobj())
             logger.debug(f"Loaded: {name}")
         
@@ -361,7 +352,8 @@ class Ensemble:
 
             logger.info(f"Using {n_jobs} parallel workers")
 
-            detector_classes = [type(d) for d in self.detectors]
+            # Serialize detector configs to preserve custom parameters
+            detector_configs = [(type(d), d.get_config()) for d in self.detectors]
             detector_names = [d.name for d in self.detectors]
 
             # Lazy patch extraction generator - reduces peak memory usage
@@ -376,7 +368,7 @@ class Ensemble:
             with Pool(
                 processes=n_jobs,
                 initializer=_init_worker,
-                initargs=(detector_classes, detector_names, self.weights)
+                initargs=(detector_configs, detector_names, self.weights)
             ) as pool:
                 if HAS_TQDM:
                     results = list(tqdm(

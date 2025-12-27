@@ -1,49 +1,48 @@
 # Known Limitations
 
-## Per-Patch Normalization
+## Score Normalization
 
-**Important**: Scores are normalized per-patch, which means:
+Understanding how scores are combined and normalized:
 
-### What This Means
+### How It Actually Works
 
-Each patch's detector scores are independently normalized to [0,1] before combining. This loses absolute scale information.
+1. **Per-Patch Scoring**: Each detector scores the patch (raw values typically 0-1)
+2. **Weighted Averaging**: Detector scores are combined via weighted average (NO per-patch normalization)
+3. **Heatmap Normalization**: Final heatmap is normalized to [0,1] for visualization
 
 ### Example
 
 ```python
-# Patch A: detectors return [0.1, 0.2, 0.3, 0.4, 0.5]
-# Normalized to: [0.0, 0.25, 0.5, 0.75, 1.0]
+# Patch A: detectors return [0.1, 0.2, 0.3]
+# Weighted average (weights all 1.0): 0.2
+# Stored as 0.2 in heatmap
 
-# Patch B: detectors return [0.5, 0.6, 0.7, 0.8, 0.9]
-# Normalized to: [0.0, 0.25, 0.5, 0.75, 1.0]
+# Patch B: detectors return [0.7, 0.8, 0.9]
+# Weighted average: 0.8
+# Stored as 0.8 in heatmap
 
-# Same normalized values, but Patch B is objectively more suspicious!
+# After all patches scored, entire heatmap normalized:
+# If min=0.2, max=0.8: Patch A becomes 0.0, Patch B becomes 1.0
 ```
 
 ### Implications
 
-- Heatmap shows **relative** suspiciousness within each patch
-- **Cannot directly compare** scores between different patches
-- Patch with highest score might not be the most suspicious in absolute terms
-- Entire image normalization happens afterward, but per-patch info is already lost
+- Patch scores CAN be compared before final normalization
+- Weighted average preserves relative detector importance
+- Final visualization normalization is for display purposes only
+- Use `return_individual=True` to see per-detector heatmaps
 
 ### Why This Design?
 
-- Combines detectors with different output ranges
-- Prevents one high-magnitude detector from dominating
-- Standard practice in ensemble methods
-
-### Alternatives (Not Implemented)
-
-1. **Global normalization**: Normalize across all patches (requires two passes)
-2. **Calibration**: Pre-compute detector ranges on training data
-3. **Quantile normalization**: Use percentile-based scaling
+- Weighted averaging allows tuning detector importance
+- Preserves more information than per-patch normalization
+- Final normalization improves visualization contrast
 
 ### Recommendations
 
 - Use heatmap to identify **regions of interest**
-- Don't rely on absolute score values
-- Compare patterns, not numbers
+- Consider detector weights based on your use case
+- Compare patterns across the image
 - Always manually inspect flagged regions
 
 ## Patch Overlap Artifacts
@@ -78,7 +77,7 @@ Current implementation is a stub using gradient magnitude, not proper sensor noi
 - Adversarial detection
 - Production use
 
-**Real PRNU requires**:
+Real PRNU requires:
 
 - Wavelet-based denoising
 - Multiple reference images
@@ -86,14 +85,14 @@ Current implementation is a stub using gradient magnitude, not proper sensor noi
 
 ## Memory Limitations
 
-**Current implementation** stores all patches in memory for multiprocessing.
+Current implementation stores all patches in memory for multiprocessing.
 
-**Memory usage**:
+Memory usage:
 
 - 2048×2048 image: ~50 MB of patches
 - 4K (3840×3840): ~180 MB of patches
 
-**Can cause issues** with:
+Can cause issues with:
 
 - Very large images (>4K)
 - Limited RAM systems
@@ -126,11 +125,12 @@ Current implementation is a stub using gradient magnitude, not proper sensor noi
 ## Performance
 
 - **Speed**: Depends on image size and CPU cores
-- **No GPU acceleration**: CPU-only implementation
+- **GPU acceleration**: Optional via CuPy (install separately)
 - **Large images**: Can take minutes on single core
-- **Multiprocessing**: Helps but has overhead
+- **Multiprocessing**: Use `--jobs/-j` flag or Python API
+- **CLI**: Use `-j -1` for all cores or `-j 4` for specific worker count
 
-Typical times (on modern CPU):
+Typical times (on modern CPU, single-threaded):
 
 - 512×512: 2-5 seconds
 - 1024×1024: 10-20 seconds
@@ -139,14 +139,14 @@ Typical times (on modern CPU):
 
 ## Thresholds
 
-**No automatic thresholds** for "fake" vs "authentic"
+No automatic thresholds for "fake" vs "authentic"
 
 - Scores are relative, not absolute
 - Depends on image content
 - No ground truth calibration
 - Requires manual interpretation
 
-**Guidelines** (not rules):
+Guidelines (not rules):
 
 - 0.0-0.3: Likely normal
 - 0.3-0.7: Ambiguous

@@ -243,14 +243,17 @@ class LBPTextureDetector(DetectorInterface):
     name = 'lbp_texture'
 
     def __init__(self, radius: int = 1, n_points: int = 8):
-        """Initialize detector.
-
+        """
         Args:
             radius: LBP circle radius
             n_points: Number of sampling points
         """
         self.radius = radius
         self.n_points = n_points
+
+    def get_config(self) -> dict:
+        """Serialize for multiprocessing."""
+        return {'radius': self.radius, 'n_points': self.n_points}
 
     def score(self, patch: np.ndarray) -> float:
         """Score patch based on LBP texture analysis.
@@ -271,11 +274,9 @@ class LBPTextureDetector(DetectorInterface):
             return 0.0
 
         try:
-            # Convert to grayscale
-            if patch.dtype == np.uint8:
-                gray = np.mean(patch.astype(np.float64), axis=2)
-            else:
-                gray = np.mean(patch, axis=2)
+            # Convert to grayscale using standard luminance conversion
+            from priorpatch.utils import rgb_to_luminance
+            gray = rgb_to_luminance(patch).astype(np.float64)
 
             # Compute uniform LBP
             lbp = compute_uniform_lbp(gray, self.radius, self.n_points)

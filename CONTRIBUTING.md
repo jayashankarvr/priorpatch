@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for considering contributing.! Here's how to get started.
+Thanks for considering contributing! Here's how to get started.
 
 ## Code of conduct
 

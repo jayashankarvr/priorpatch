@@ -133,14 +133,17 @@ class ELADetector(DetectorInterface):
     name = 'ela'
 
     def __init__(self, quality: int = 90, scale: float = 10.0):
-        """Initialize ELA detector.
-
+        """
         Args:
-            quality: JPEG quality for recompression (70-95 recommended)
+            quality: JPEG quality for recompression (70-95 typical)
             scale: Scale factor for ELA visualization
         """
         self.quality = quality
         self.scale = scale
+
+    def get_config(self) -> dict:
+        """Serialize for multiprocessing."""
+        return {'quality': self.quality, 'scale': self.scale}
 
     def score(self, patch: np.ndarray) -> float:
         """Score patch based on ELA analysis.

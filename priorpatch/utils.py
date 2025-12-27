@@ -110,9 +110,7 @@ def save_heatmap(heatmap: np.ndarray, image: np.ndarray, outpath: str,
 
 
 def validate_path(path: str, must_exist: bool = False, base_dir: str = None) -> Path:
-    """
-    Check path is valid. If base_dir given, ensures path doesn't escape it.
-    """
+    """Validate path and prevent directory traversal."""
     if not path:
         raise ValueError("Path cannot be empty")
 

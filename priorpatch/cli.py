@@ -10,7 +10,7 @@ import logging
 from pathlib import Path
 from priorpatch.core import Ensemble
 from priorpatch.utils import load_image, save_heatmap
-from priorpatch.gpu_backend import use_gpu, disable_gpu, get_gpu_info
+from priorpatch.gpu_backend import disable_gpu, get_gpu_info
 
 logger = logging.getLogger(__name__)
 
@@ -19,10 +19,7 @@ IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.tif', '.webp'}
 
 
 def find_images(path_or_pattern):
-    """
-    Find image files from a path, directory, or glob pattern.
-    Returns list of image file paths.
-    """
+    """Find image files from a path, directory, or glob pattern."""
     images = []
 
     # Check if it's a glob pattern (contains * or ?)
@@ -46,10 +43,7 @@ def find_images(path_or_pattern):
 
 
 def analyze_single_image(img_path, ensemble, args, outdir):
-    """
-    Analyze a single image and save results.
-    Returns dict with results or error info.
-    """
+    """Analyze a single image and save results."""
     result = {
         'file': img_path,
         'filename': os.path.basename(img_path),
@@ -65,6 +59,8 @@ def analyze_single_image(img_path, ensemble, args, outdir):
                 img,
                 patch_size=args.patch_size,
                 stride=args.stride,
+                use_multiprocessing=(args.jobs != 1),
+                n_jobs=args.jobs,
                 return_individual=True
             )
             heat = analysis.combined
@@ -74,7 +70,9 @@ def analyze_single_image(img_path, ensemble, args, outdir):
             heat = ensemble.score_image(
                 img,
                 patch_size=args.patch_size,
-                stride=args.stride
+                stride=args.stride,
+                use_multiprocessing=(args.jobs != 1),
+                n_jobs=args.jobs
             )
             individual_heats = None
             detector_names = None
@@ -187,6 +185,12 @@ def build_parser():
         action='store_true',
         help='Disable GPU acceleration (use CPU only)'
     )
+    run.add_argument(
+        '--jobs', '-j',
+        type=int,
+        default=1,
+        help='Number of parallel workers (1=single-threaded, -1=all cores, default: 1)'
+    )
 
     return p
 
@@ -196,18 +200,19 @@ def main(argv=None):
     p = build_parser()
     args = p.parse_args(argv)
 
-    # Configure logging
-    if args.cmd == 'analyze' and hasattr(args, 'log_level'):
-        logging.basicConfig(
-            level=getattr(logging, args.log_level),
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-            force=True
-        )
-    else:
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
+    # Configure logging only if not already configured
+    # This prevents overwriting embedder's logging configuration
+    if not logging.getLogger().hasHandlers():
+        if args.cmd == 'analyze' and hasattr(args, 'log_level'):
+            logging.basicConfig(
+                level=getattr(logging, args.log_level),
+                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            )
+        else:
+            logging.basicConfig(
+                level=logging.INFO,
+                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            )
 
     if args.cmd == 'analyze':
         try:

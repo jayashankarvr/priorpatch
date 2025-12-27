@@ -25,3 +25,12 @@ class DetectorInterface(ABC):
             Anomaly score (float). Will be normalized by ensemble.
         """
         raise NotImplementedError
+
+    def get_config(self) -> dict:
+        """Serialize detector params for multiprocessing."""
+        return {}
+
+    @classmethod
+    def from_config(cls, config: dict):
+        """Create detector from config dict."""
+        return cls(**config)

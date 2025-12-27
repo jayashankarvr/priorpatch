@@ -175,14 +175,7 @@ Each detector looks for different types of manipulation artifacts. Here's what t
 
 **What it checks:** Unnatural noise patterns
 
-**How it works:** Real cameras produce consistent sensor noise across the entire image - typically Gaussian/Poisson distributed and correlated across RGB channels. AI-generated images often have:
-
-- Regions that are too smooth (no noise)
-- Inconsistent noise levels in different areas
-- Wrong noise distribution (not Gaussian)
-- Uncorrelated noise between color channels
-
-This detector measures noise variance, distribution shape (skewness, kurtosis), regional consistency, and cross-channel correlation.
+**How it works:** Analyzes noise variance, distribution (skewness, kurtosis), regional consistency, and RGB channel correlation. Real cameras have consistent Gaussian/Poisson noise. AI images often have too-smooth regions or inconsistent noise levels.
 
 **Good for:**
 

@@ -95,14 +95,17 @@ class BenfordLawDetector(DetectorInterface):
     name = 'benford_law'
 
     def __init__(self, block_size: int = 8, use_ac_only: bool = True):
-        """Initialize detector.
-
+        """
         Args:
             block_size: DCT block size (default 8 for JPEG compatibility)
-            use_ac_only: If True, exclude DC coefficient (recommended)
+            use_ac_only: If True, exclude DC coefficient
         """
         self.block_size = block_size
         self.use_ac_only = use_ac_only
+
+    def get_config(self) -> dict:
+        """Serialize for multiprocessing."""
+        return {'block_size': self.block_size, 'use_ac_only': self.use_ac_only}
 
     def score(self, patch: np.ndarray) -> float:
         """Score patch based on Benford's Law deviation.

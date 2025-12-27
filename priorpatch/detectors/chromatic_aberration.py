@@ -202,12 +202,15 @@ class ChromaticAberrationDetector(DetectorInterface):
     name = 'chromatic_aberration'
 
     def __init__(self, edge_threshold: float = 30.0):
-        """Initialize detector.
-
+        """
         Args:
             edge_threshold: Threshold for edge detection
         """
         self.edge_threshold = edge_threshold
+
+    def get_config(self) -> dict:
+        """Serialize for multiprocessing."""
+        return {'edge_threshold': self.edge_threshold}
 
     def score(self, patch: np.ndarray) -> float:
         """Score patch based on chromatic aberration analysis.

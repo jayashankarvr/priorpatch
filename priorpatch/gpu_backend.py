@@ -1,25 +1,10 @@
 """
-GPU backend module - provides CuPy acceleration with NumPy fallback.
-
-This module provides a unified interface for array operations that can
-use either CuPy (GPU) or NumPy (CPU) depending on availability.
+GPU backend - unified interface for CuPy (GPU) or NumPy (CPU) operations.
 
 Usage:
-    from priorpatch.gpu_backend import get_array_module, to_numpy, use_gpu
-
-    # Check if GPU is available
-    if use_gpu():
-        print("Using GPU acceleration")
-
-    # Get appropriate array module
-    xp = get_array_module()  # Returns cupy if available, else numpy
-
-    # Use in code
-    arr = xp.array([1, 2, 3])
-    result = xp.fft.fft2(arr)
-
-    # Convert back to numpy for further processing
-    np_result = to_numpy(result)
+    xp = get_array_module()  # cupy if available, else numpy
+    arr = xp.fft.fft2(data)
+    result = to_numpy(arr)  # convert back to numpy
 """
 
 import logging
