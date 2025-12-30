@@ -1,0 +1,1383 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/jayashankarvr/priorpatch/detectors/">
+      
+      
+        <link rel="prev" href="../usage/">
+      
+      
+        <link rel="next" href="../architecture/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Detectors - PriorPatch</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#detectors" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="PriorPatch" class="md-header__button md-logo" aria-label="PriorPatch" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PriorPatch
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Detectors
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/jayashankarvr/priorpatch" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jayashankarvr/priorpatch
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="PriorPatch" class="md-nav__button md-logo" aria-label="PriorPatch" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    PriorPatch
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/jayashankarvr/priorpatch" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jayashankarvr/priorpatch
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Detectors
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Detectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#color-stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Color Stats
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neighbor-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Neighbor Consistency
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fftdct" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FFT/DCT
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#residual-energy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Residual Energy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dct-co-occurrence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DCT Co-occurrence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prnu-stub" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PRNU (Stub)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jpeg-ghost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JPEG Ghost
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gan-fingerprint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GAN Fingerprint
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#noise-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Noise Consistency
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benfords-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benford's Law
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cfa-artifact-demosaicing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CFA Artifact (Demosaicing)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lbp-texture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LBP Texture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chromatic-aberration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chromatic Aberration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prnu-wavelet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PRNU Wavelet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparison
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-them-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using them together
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-your-own" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding your own
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Limitations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#color-stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Color Stats
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neighbor-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Neighbor Consistency
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fftdct" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FFT/DCT
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#residual-energy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Residual Energy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dct-co-occurrence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DCT Co-occurrence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prnu-stub" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PRNU (Stub)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jpeg-ghost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JPEG Ghost
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gan-fingerprint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GAN Fingerprint
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#noise-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Noise Consistency
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benfords-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benford's Law
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cfa-artifact-demosaicing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CFA Artifact (Demosaicing)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lbp-texture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LBP Texture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chromatic-aberration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chromatic Aberration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prnu-wavelet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PRNU Wavelet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparison
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-them-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using them together
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-your-own" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding your own
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="detectors">Detectors</h1>
+<p>Each detector looks for different types of manipulation artifacts. Here's what they do and when they're useful.</p>
+<h2 id="color-stats">Color Stats</h2>
+<p><strong>What it checks:</strong> RGB channel correlations</p>
+<p><strong>How it works:</strong> In real photos, color channels are correlated (R-G around 0.9, G-B around 0.9, R-B around 0.85). That's just how light works. When you edit colors, these relationships often break.</p>
+<p><strong>Good for:</strong></p>
+<ul>
+<li>Color grading inconsistencies</li>
+<li>Spliced regions from different lighting</li>
+<li>Unnatural color manipulation</li>
+</ul>
+<p><strong>Bad for:</strong></p>
+<ul>
+<li>Grayscale images</li>
+<li>Images that are naturally weird (intentional artistic color effects)</li>
+</ul>
+<p><strong>Example:</strong> If you paste a person from a sunny photo into an overcast scene, the RGB correlations in the pasted region won't match.</p>
+<hr />
+<h2 id="neighbor-consistency">Neighbor Consistency</h2>
+<p><strong>What it checks:</strong> Pixel-to-neighbor relationships</p>
+<p><strong>How it works:</strong> Predicts each pixel from its 8 neighbors. In natural images, this works pretty well. Splice boundaries and edited regions often fail this test.</p>
+<p><strong>Good for:</strong></p>
+<ul>
+<li>Copy-paste detection</li>
+<li>Splice boundaries</li>
+<li>Inpainting artifacts</li>
+</ul>
+<p><strong>Bad for:</strong></p>
+<ul>
+<li>Genuine edges and textures (can false-positive)</li>
+</ul>
+<p><strong>Example:</strong> When you copy-paste an object, the boundary pixels don't match their new neighbors as well as they should.</p>
+<hr />
+<h2 id="fftdct">FFT/DCT</h2>
+<p><strong>What it checks:</strong> Frequency domain patterns</p>
+<p><strong>How it works:</strong> Natural images follow a ~1/f^2 power law in frequency space. Resampling, JPEG compression, and synthetic generation mess this up. Also catches periodic patterns that shouldn't be there.</p>
+<p><strong>Good for:</strong></p>
+<ul>
+<li>Detecting resizing/rotation</li>
+<li>JPEG compression inconsistencies</li>
+<li>AI-generated content (sometimes)</li>
+<li>Periodic artifacts from generation</li>
+</ul>
+<p><strong>Bad for:</strong></p>
+<ul>
+<li>Small patches (needs at least 16x16)</li>
+<li>Genuinely textured regions</li>
+</ul>
+<p><strong>Example:</strong> If part of an image was resized, it'll have different frequency characteristics than the rest.</p>
+<hr />
+<h2 id="residual-energy">Residual Energy</h2>
+<p><strong>What it checks:</strong> High-frequency noise levels</p>
+<p><strong>How it works:</strong> Removes low-frequency content with Gaussian blur, measures what's left. Real photos have sensor noise and fine texture. Over-edited or AI-generated regions are often too smooth.</p>
+<p><strong>Good for:</strong></p>
+<ul>
+<li>Detecting smoothing/blurring</li>
+<li>AI-generated backgrounds (often too clean)</li>
+<li>Over-processed regions</li>
+</ul>
+<p><strong>Bad for:</strong></p>
+<ul>
+<li>Naturally smooth areas (sky, walls)</li>
+<li>Out-of-focus regions</li>
+</ul>
+<p><strong>Example:</strong> AI-generated backgrounds often lack the natural sensor noise present in real photos.</p>
+<hr />
+<h2 id="dct-co-occurrence">DCT Co-occurrence</h2>
+<p><strong>What it checks:</strong> JPEG compression patterns</p>
+<p><strong>How it works:</strong> Analyzes 8x8 DCT block coefficients. Images with consistent JPEG history have consistent patterns. Splicing from different sources or double compression creates mismatches.</p>
+<p><strong>Good for:</strong></p>
+<ul>
+<li>Detecting regions from different images</li>
+<li>Double JPEG compression</li>
+<li>Mixed compression quality</li>
+</ul>
+<p><strong>Bad for:</strong></p>
+<ul>
+<li>Uncompressed images (less useful)</li>
+<li>Images with complex JPEG history</li>
+</ul>
+<p><strong>Example:</strong> If you paste a high-quality JPEG face onto a low-quality background, the DCT patterns won't match.</p>
+<hr />
+<h2 id="prnu-stub">PRNU (Stub)</h2>
+<p><strong>What it checks:</strong> Sensor noise patterns</p>
+<p><strong>Status:</strong> ! Currently a placeholder - just uses gradient magnitude</p>
+<p><strong>How it should work:</strong> Real PRNU extracts camera sensor fingerprints using wavelet denoising. Each camera has a unique noise pattern. Manipulated regions either lack this or have mismatched patterns.</p>
+<p><strong>Current implementation:</strong> Just measures gradient magnitude as a proxy for high-frequency content.</p>
+<p><strong>TODO:</strong> Replace with proper wavelet-based PRNU extraction</p>
+<p><strong>Why it matters:</strong> When implemented properly, PRNU is one of the most reliable forensic techniques. But it's also computationally expensive.</p>
+<hr />
+<h2 id="jpeg-ghost">JPEG Ghost</h2>
+<p><strong>What it checks:</strong> JPEG recompression artifacts</p>
+<p><strong>How it works:</strong> Recompresses the patch at various JPEG quality levels (50-95) and measures the difference from the original. If a region was originally compressed at quality Q, recompressing at Q produces minimal change. Different regions from different JPEG sources will have different "ghost" patterns.</p>
+<p><strong>Good for:</strong></p>
+<ul>
+<li>Spliced images from multiple JPEG sources</li>
+<li>Copy-paste from different quality images</li>
+<li>Detecting manipulation in JPEG images</li>
+</ul>
+<p><strong>Bad for:</strong></p>
+<ul>
+<li>Uncompressed source images</li>
+<li>Images with heavy post-processing</li>
+<li>AI-generated images (they haven't been through JPEG)</li>
+</ul>
+<p><strong>Example:</strong> If you paste a face from a high-quality JPEG (Q=90) into a low-quality background (Q=70), the JPEG ghost detector will show inconsistent patterns.</p>
+<hr />
+<h2 id="gan-fingerprint">GAN Fingerprint</h2>
+<p><strong>What it checks:</strong> Neural network upsampling artifacts</p>
+<p><strong>How it works:</strong> GANs and AI generators often use transposed convolutions for upsampling, which leaves checkerboard patterns in the frequency domain. This detector looks at FFT patterns for:</p>
+<ul>
+<li>Periodic peaks at quarter/half frequencies (from 2x/4x upsampling)</li>
+<li>Spectral slope deviation from natural 1/f pattern</li>
+<li>Unusual frequency symmetry</li>
+</ul>
+<p><strong>Good for:</strong></p>
+<ul>
+<li>Detecting AI-generated images (DALL-E, Midjourney, Stable Diffusion)</li>
+<li>GAN-generated faces</li>
+<li>Neural network-based upscaling artifacts</li>
+</ul>
+<p><strong>Bad for:</strong></p>
+<ul>
+<li>Real photographs</li>
+<li>Traditional edits (copy-paste, color correction)</li>
+<li>Very small patches</li>
+</ul>
+<p><strong>Example:</strong> GAN-generated faces often have telltale periodic patterns in their frequency spectrum that real camera images don't produce.</p>
+<hr />
+<h2 id="noise-consistency">Noise Consistency</h2>
+<p><strong>What it checks:</strong> Unnatural noise patterns</p>
+<p><strong>How it works:</strong> Real cameras produce consistent sensor noise across the entire image - typically Gaussian/Poisson distributed and correlated across RGB channels. AI-generated images often have:</p>
+<ul>
+<li>Regions that are too smooth (no noise)</li>
+<li>Inconsistent noise levels in different areas</li>
+<li>Wrong noise distribution (not Gaussian)</li>
+<li>Uncorrelated noise between color channels</li>
+</ul>
+<p>This detector measures noise variance, distribution shape (skewness, kurtosis), regional consistency, and cross-channel correlation.</p>
+<p><strong>Good for:</strong></p>
+<ul>
+<li>AI-generated images (often too clean)</li>
+<li>Heavily processed/inpainted regions</li>
+<li>Synthetic backgrounds</li>
+</ul>
+<p><strong>Bad for:</strong></p>
+<ul>
+<li>High-ISO photos (legitimate heavy noise)</li>
+<li>Professionally denoised photos</li>
+<li>Very smooth natural scenes (sky, water)</li>
+</ul>
+<p><strong>Example:</strong> An AI-generated person might have perfectly smooth skin with no sensor noise, while the background has some noise - this inconsistency is suspicious.</p>
+<hr />
+<h2 id="benfords-law">Benford's Law</h2>
+<p><strong>What it checks:</strong> First-digit distribution in DCT coefficients</p>
+<p><strong>How it works:</strong> Benford's Law says that in real-world data, the first digit isn't evenly distributed - 1 appears more than 2, 2 more than 3, etc. DCT coefficients from real photos follow this pattern. Edited and AI images often don't.</p>
+<p><strong>Good for:</strong></p>
+<ul>
+<li>General manipulation detection</li>
+<li>AI-generated images</li>
+<li>Any kind of synthetic content</li>
+</ul>
+<p><strong>Bad for:</strong></p>
+<ul>
+<li>Very small patches</li>
+<li>Heavily textured images</li>
+</ul>
+<p><strong>Research:</strong> Achieves ~90% F1-score according to published studies. One of the most mathematically robust forensic techniques.</p>
+<hr />
+<h2 id="cfa-artifact-demosaicing">CFA Artifact (Demosaicing)</h2>
+<p><strong>What it checks:</strong> Presence of Bayer pattern demosaicing artifacts</p>
+<p><strong>How it works:</strong> Real cameras have Bayer sensors - each pixel only sees one color (R, G, or B). The camera fills in the missing colors through interpolation (demosaicing), which creates specific patterns between pixels. AI images are made directly in RGB, so they don't have these patterns.</p>
+<p><strong>Good for:</strong></p>
+<ul>
+<li>AI-generated images (most reliable single detector)</li>
+<li>Any synthetic content</li>
+<li>Distinguishing real cameras from computer graphics</li>
+</ul>
+<p><strong>Bad for:</strong></p>
+<ul>
+<li>Images with heavy post-processing</li>
+<li>Specific camera brands with unusual CFA patterns</li>
+</ul>
+<p><strong>Why it's powerful:</strong> AI can't fake what happens inside a real camera sensor. This physical difference is really hard to get around - probably the best single feature for catching AI images.</p>
+<hr />
+<h2 id="lbp-texture">LBP Texture</h2>
+<p><strong>What it checks:</strong> Local texture patterns</p>
+<p><strong>How it works:</strong> LBP compares each pixel to its 8 neighbors - brighter neighbor = 1, darker = 0. This gives an 8-bit pattern per pixel. Real images have certain patterns that show up often; AI images tend to have more uniform or weird distributions.</p>
+<p><strong>Good for:</strong></p>
+<ul>
+<li>Deepfakes and AI-generated faces</li>
+<li>General AI detection</li>
+<li>Texture-based manipulation</li>
+</ul>
+<p><strong>Bad for:</strong></p>
+<ul>
+<li>Smooth natural scenes</li>
+<li>Very small patches</li>
+</ul>
+<p><strong>Research:</strong> LBP-based methods achieve 83-99% accuracy on deepfake datasets.</p>
+<hr />
+<h2 id="chromatic-aberration">Chromatic Aberration</h2>
+<p><strong>What it checks:</strong> Lens chromatic aberration consistency</p>
+<p><strong>How it works:</strong> Real lenses can't focus all colors to the same spot - red and blue shift slightly in opposite directions, especially near the edges. AI images don't go through real optics, so they either have no color fringing or it looks wrong.</p>
+<p><strong>Good for:</strong></p>
+<ul>
+<li>AI-generated images</li>
+<li>Detecting spliced regions with different CA patterns</li>
+<li>Source identification</li>
+</ul>
+<p><strong>Bad for:</strong></p>
+<ul>
+<li>Images with CA already corrected</li>
+<li>Low-contrast images with few edges</li>
+</ul>
+<hr />
+<h2 id="prnu-wavelet">PRNU Wavelet</h2>
+<p><strong>What it checks:</strong> Sensor noise patterns using wavelet denoising</p>
+<p><strong>How it works:</strong> Each camera sensor has unique manufacturing imperfections that create a Photo Response Non-Uniformity (PRNU) - a consistent noise pattern in all images from that camera. This detector extracts the noise residual using wavelet-based denoising and analyzes its characteristics. AI images lack real sensor noise patterns.</p>
+<p><strong>Good for:</strong></p>
+<ul>
+<li>AI-generated images (no real sensor noise)</li>
+<li>Heavily processed images</li>
+<li>Source camera identification</li>
+</ul>
+<p><strong>Bad for:</strong></p>
+<ul>
+<li>High-ISO photos (strong legitimate noise)</li>
+<li>Images with artificial noise added</li>
+</ul>
+<hr />
+<h2 id="comparison">Comparison</h2>
+<table>
+<thead>
+<tr>
+<th>Detector</th>
+<th>Speed</th>
+<th>Best For</th>
+<th>Weakness</th>
+<th>AI Detection</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>color_stats</td>
+<td>Fast</td>
+<td>Color edits</td>
+<td>Grayscale images</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>neighbor_consistency</td>
+<td>Fast</td>
+<td>Splice boundaries</td>
+<td>Genuine edges</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>fft_dct</td>
+<td>Slow</td>
+<td>Resampling, JPEG</td>
+<td>Small patches</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>residual_energy</td>
+<td>Medium</td>
+<td>Smoothing, AI gen</td>
+<td>Naturally smooth areas</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>dct_cooccurrence</td>
+<td>Medium</td>
+<td>JPEG inconsistencies</td>
+<td>Uncompressed images</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>ela</td>
+<td>Medium</td>
+<td>JPEG manipulation</td>
+<td>Uncompressed images</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>lighting_consistency</td>
+<td>Medium</td>
+<td>Composites, splicing</td>
+<td>Multiple light sources</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>copy_move</td>
+<td>Slow</td>
+<td>Duplicated regions</td>
+<td>Small patches</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>jpeg_ghost</td>
+<td>Slow</td>
+<td>JPEG splicing</td>
+<td>Uncompressed/AI images</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>gan_fingerprint</td>
+<td>Medium</td>
+<td>AI upsampling</td>
+<td>Real photos</td>
+<td>High</td>
+</tr>
+<tr>
+<td>noise_consistency</td>
+<td>Medium</td>
+<td>AI-generated/smooth</td>
+<td>High-ISO photos</td>
+<td>High</td>
+</tr>
+<tr>
+<td><strong>benford_law</strong></td>
+<td>Medium</td>
+<td>All manipulations</td>
+<td>Small patches</td>
+<td><strong>Very High</strong></td>
+</tr>
+<tr>
+<td><strong>cfa_artifact</strong></td>
+<td>Fast</td>
+<td>AI detection</td>
+<td>Post-processed</td>
+<td><strong>Highest</strong></td>
+</tr>
+<tr>
+<td><strong>lbp_texture</strong></td>
+<td>Medium</td>
+<td>Deepfakes, AI</td>
+<td>Smooth scenes</td>
+<td><strong>Very High</strong></td>
+</tr>
+<tr>
+<td><strong>chromatic_aberration</strong></td>
+<td>Medium</td>
+<td>AI, splicing</td>
+<td>CA-corrected</td>
+<td>High</td>
+</tr>
+<tr>
+<td><strong>prnu_wavelet</strong></td>
+<td>Slow</td>
+<td>AI, source ID</td>
+<td>High-ISO</td>
+<td>High</td>
+</tr>
+</tbody>
+</table>
+<h2 id="using-them-together">Using them together</h2>
+<p>The ensemble combines all detectors using z-score normalization and weighted averaging. This helps because:</p>
+<ul>
+<li>Different manipulations leave different traces</li>
+<li>One detector's false positive might be corrected by others</li>
+<li>You can weight detectors based on what you trust more</li>
+</ul>
+<p>Example config:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;enabled_detectors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;color_stats&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;fft_dct&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;neighbor_consistency&quot;</span><span class="p">],</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;detector_weights&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">&quot;fft_dct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w">           </span><span class="c1">// trust frequency analysis more</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">&quot;color_stats&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="nt">&quot;neighbor_consistency&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="w">   </span><span class="c1">// less reliable in this dataset</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="adding-your-own">Adding your own</h2>
+<p>See <code>CONTRIBUTING.md</code> for how to add a new detector. It's pretty straightforward - just implement the <code>score()</code> method and register it. With auto-discovery, you just drop a file in <code>priorpatch/detectors/</code> and it's automatically loaded.</p>
+<p>Some ideas for new detectors:</p>
+<ul>
+<li>Shadow direction consistency</li>
+<li>Perspective/vanishing point consistency</li>
+<li>Reflection analysis</li>
+<li>Metadata consistency checking</li>
+</ul>
+<h2 id="references">References</h2>
+<p>These algorithms are based on various forensics papers:</p>
+<ul>
+<li>Popescu &amp; Farid: Copy-move forgery detection, CFA artifact detection</li>
+<li>Lukas et al: PRNU-based camera identification (IEEE Trans. IFS, 2006)</li>
+<li>Farid: Frequency analysis for manipulation detection</li>
+<li>Mahdian &amp; Saic: Using inconsistencies for detection</li>
+<li>Fu et al: Benford's Law for JPEG coefficients (2007)</li>
+<li>Johnson &amp; Farid: Chromatic aberration for forgery detection (2006)</li>
+<li>Ojala et al: Local Binary Patterns for texture classification</li>
+<li>Bonettini et al: Benford's Law for GAN detection (2020)</li>
+</ul>
+<p>Full references in academic papers about image forensics.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
