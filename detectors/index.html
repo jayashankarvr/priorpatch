@@ -1059,14 +1059,7 @@
 <hr />
 <h2 id="noise-consistency">Noise Consistency</h2>
 <p><strong>What it checks:</strong> Unnatural noise patterns</p>
-<p><strong>How it works:</strong> Real cameras produce consistent sensor noise across the entire image - typically Gaussian/Poisson distributed and correlated across RGB channels. AI-generated images often have:</p>
-<ul>
-<li>Regions that are too smooth (no noise)</li>
-<li>Inconsistent noise levels in different areas</li>
-<li>Wrong noise distribution (not Gaussian)</li>
-<li>Uncorrelated noise between color channels</li>
-</ul>
-<p>This detector measures noise variance, distribution shape (skewness, kurtosis), regional consistency, and cross-channel correlation.</p>
+<p><strong>How it works:</strong> Analyzes noise variance, distribution (skewness, kurtosis), regional consistency, and RGB channel correlation. Real cameras have consistent Gaussian/Poisson noise. AI images often have too-smooth regions or inconsistent noise levels.</p>
 <p><strong>Good for:</strong></p>
 <ul>
 <li>AI-generated images (often too clean)</li>

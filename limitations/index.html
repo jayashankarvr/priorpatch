@@ -477,22 +477,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#per-patch-normalization" class="md-nav__link">
+  <a href="#score-normalization" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Per-Patch Normalization
+        Score Normalization
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Per-Patch Normalization">
+    <nav class="md-nav" aria-label="Score Normalization">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#what-this-means" class="md-nav__link">
+  <a href="#how-it-actually-works" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What This Means
+        How It Actually Works
       
     </span>
   </a>
@@ -526,17 +526,6 @@
     <span class="md-ellipsis">
       
         Why This Design?
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#alternatives-not-implemented" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Alternatives (Not Implemented)
       
     </span>
   </a>
@@ -749,22 +738,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#per-patch-normalization" class="md-nav__link">
+  <a href="#score-normalization" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Per-Patch Normalization
+        Score Normalization
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Per-Patch Normalization">
+    <nav class="md-nav" aria-label="Score Normalization">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#what-this-means" class="md-nav__link">
+  <a href="#how-it-actually-works" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What This Means
+        How It Actually Works
       
     </span>
   </a>
@@ -798,17 +787,6 @@
     <span class="md-ellipsis">
       
         Why This Design?
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#alternatives-not-implemented" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Alternatives (Not Implemented)
       
     </span>
   </a>
@@ -1007,43 +985,44 @@
 
 
 <h1 id="known-limitations">Known Limitations</h1>
-<h2 id="per-patch-normalization">Per-Patch Normalization</h2>
-<p><strong>Important</strong>: Scores are normalized per-patch, which means:</p>
-<h3 id="what-this-means">What This Means</h3>
-<p>Each patch's detector scores are independently normalized to [0,1] before combining. This loses absolute scale information.</p>
+<h2 id="score-normalization">Score Normalization</h2>
+<p>Understanding how scores are combined and normalized:</p>
+<h3 id="how-it-actually-works">How It Actually Works</h3>
+<ol>
+<li><strong>Per-Patch Scoring</strong>: Each detector scores the patch (raw values typically 0-1)</li>
+<li><strong>Weighted Averaging</strong>: Detector scores are combined via weighted average (NO per-patch normalization)</li>
+<li><strong>Heatmap Normalization</strong>: Final heatmap is normalized to [0,1] for visualization</li>
+</ol>
 <h3 id="example">Example</h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Patch A: detectors return [0.1, 0.2, 0.3, 0.4, 0.5]</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># Normalized to: [0.0, 0.25, 0.5, 0.75, 1.0]</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Patch B: detectors return [0.5, 0.6, 0.7, 0.8, 0.9]</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Normalized to: [0.0, 0.25, 0.5, 0.75, 1.0]</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Same normalized values, but Patch B is objectively more suspicious!</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Patch A: detectors return [0.1, 0.2, 0.3]</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># Weighted average (weights all 1.0): 0.2</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Stored as 0.2 in heatmap</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Patch B: detectors return [0.7, 0.8, 0.9]</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># Weighted average: 0.8</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Stored as 0.8 in heatmap</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># After all patches scored, entire heatmap normalized:</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># If min=0.2, max=0.8: Patch A becomes 0.0, Patch B becomes 1.0</span>
 </span></code></pre></div>
 <h3 id="implications">Implications</h3>
 <ul>
-<li>Heatmap shows <strong>relative</strong> suspiciousness within each patch</li>
-<li><strong>Cannot directly compare</strong> scores between different patches</li>
-<li>Patch with highest score might not be the most suspicious in absolute terms</li>
-<li>Entire image normalization happens afterward, but per-patch info is already lost</li>
+<li>Patch scores CAN be compared before final normalization</li>
+<li>Weighted average preserves relative detector importance</li>
+<li>Final visualization normalization is for display purposes only</li>
+<li>Use <code>return_individual=True</code> to see per-detector heatmaps</li>
 </ul>
 <h3 id="why-this-design">Why This Design?</h3>
 <ul>
-<li>Combines detectors with different output ranges</li>
-<li>Prevents one high-magnitude detector from dominating</li>
-<li>Standard practice in ensemble methods</li>
+<li>Weighted averaging allows tuning detector importance</li>
+<li>Preserves more information than per-patch normalization</li>
+<li>Final normalization improves visualization contrast</li>
 </ul>
-<h3 id="alternatives-not-implemented">Alternatives (Not Implemented)</h3>
-<ol>
-<li><strong>Global normalization</strong>: Normalize across all patches (requires two passes)</li>
-<li><strong>Calibration</strong>: Pre-compute detector ranges on training data</li>
-<li><strong>Quantile normalization</strong>: Use percentile-based scaling</li>
-</ol>
 <h3 id="recommendations">Recommendations</h3>
 <ul>
 <li>Use heatmap to identify <strong>regions of interest</strong></li>
-<li>Don't rely on absolute score values</li>
-<li>Compare patterns, not numbers</li>
+<li>Consider detector weights based on your use case</li>
+<li>Compare patterns across the image</li>
 <li>Always manually inspect flagged regions</li>
 </ul>
 <h2 id="patch-overlap-artifacts">Patch Overlap Artifacts</h2>
@@ -1074,20 +1053,20 @@
 <li>Adversarial detection</li>
 <li>Production use</li>
 </ul>
-<p><strong>Real PRNU requires</strong>:</p>
+<p>Real PRNU requires:</p>
 <ul>
 <li>Wavelet-based denoising</li>
 <li>Multiple reference images</li>
 <li>Proper correlation analysis</li>
 </ul>
 <h2 id="memory-limitations">Memory Limitations</h2>
-<p><strong>Current implementation</strong> stores all patches in memory for multiprocessing.</p>
-<p><strong>Memory usage</strong>:</p>
+<p>Current implementation stores all patches in memory for multiprocessing.</p>
+<p>Memory usage:</p>
 <ul>
 <li>2048×2048 image: ~50 MB of patches</li>
 <li>4K (3840×3840): ~180 MB of patches</li>
 </ul>
-<p><strong>Can cause issues</strong> with:</p>
+<p>Can cause issues with:</p>
 <ul>
 <li>Very large images (&gt;4K)</li>
 <li>Limited RAM systems</li>
@@ -1119,11 +1098,12 @@
 <h2 id="performance">Performance</h2>
 <ul>
 <li><strong>Speed</strong>: Depends on image size and CPU cores</li>
-<li><strong>No GPU acceleration</strong>: CPU-only implementation</li>
+<li><strong>GPU acceleration</strong>: Optional via CuPy (install separately)</li>
 <li><strong>Large images</strong>: Can take minutes on single core</li>
-<li><strong>Multiprocessing</strong>: Helps but has overhead</li>
+<li><strong>Multiprocessing</strong>: Use <code>--jobs/-j</code> flag or Python API</li>
+<li><strong>CLI</strong>: Use <code>-j -1</code> for all cores or <code>-j 4</code> for specific worker count</li>
 </ul>
-<p>Typical times (on modern CPU):</p>
+<p>Typical times (on modern CPU, single-threaded):</p>
 <ul>
 <li>512×512: 2-5 seconds</li>
 <li>1024×1024: 10-20 seconds</li>
@@ -1131,14 +1111,14 @@
 <li>4K: 3-5 minutes</li>
 </ul>
 <h2 id="thresholds">Thresholds</h2>
-<p><strong>No automatic thresholds</strong> for "fake" vs "authentic"</p>
+<p>No automatic thresholds for "fake" vs "authentic"</p>
 <ul>
 <li>Scores are relative, not absolute</li>
 <li>Depends on image content</li>
 <li>No ground truth calibration</li>
 <li>Requires manual interpretation</li>
 </ul>
-<p><strong>Guidelines</strong> (not rules):</p>
+<p>Guidelines (not rules):</p>
 <ul>
 <li>0.0-0.3: Likely normal</li>
 <li>0.3-0.7: Ambiguous</li>
